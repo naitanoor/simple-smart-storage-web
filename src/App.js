@@ -23,6 +23,7 @@ function App() {
     <Router>
       {isSignedIn && <DefaultNavbar />}
       <Routes>
+        <Route path="/" element={<SignIn />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

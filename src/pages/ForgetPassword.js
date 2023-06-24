@@ -27,9 +27,13 @@ const ForgotPassword = () => {
       UserController.forgetPassword(payload)
         .then((res) => {
           setLoading(false);
-          setSuccessMessage("Password reset email sent successfully");
           reset();
-          navigate("/reset-password");
+          setSuccessMessage(
+            "Password reset email sent successfully, please check your email."
+          );
+          setTimeout(() => {
+            navigate("/reset-password");
+          }, 3000);
         })
         .catch((e) => {
           setLoading(false);
