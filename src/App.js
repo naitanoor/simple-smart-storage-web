@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Protected from "./utils/ProtectedRoutes";
 
 // public routes
-import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
@@ -14,6 +13,8 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import DefaultNavbar from "./components/Navbar/DefaultNavbar";
 import { AppContext } from "./context/AppContext";
+import ForgotPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const { isSignedIn } = useContext(AppContext);
@@ -22,9 +23,10 @@ function App() {
     <Router>
       {isSignedIn && <DefaultNavbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/dashboard"
           element={

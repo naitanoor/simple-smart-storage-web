@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 import { UserController } from "../api/controllers/UserController";
 
@@ -10,6 +11,7 @@ const SignupScreen = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const reset = () => {
     setError(null);
@@ -43,30 +45,16 @@ const SignupScreen = () => {
     }
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // Perform dummy API call here using formData
-  //   fetch("https://api.example.com/signup", {
-  //     method: "POST",
-  //     body: JSON.stringify("formData"),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("API response:", data);
-  //       // Handle the API response here
-  //     })
-  //     .catch((error) => {
-  //       console.error("API error:", error);
-  //       // Handle the API error here
-  //     });
-  // };
-
   const handleChange = (setState) => {
     return (event) => {
       reset();
       const { value } = event.target;
       setState(value);
     };
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
   };
 
   return (
@@ -130,15 +118,23 @@ const SignupScreen = () => {
             >
               Password
             </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={handleChange(setPassword)}
-              required
-            />
+            <div className="relative">
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={handleChange(setPassword)}
+                required
+              />
+              <span
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </span>
+            </div>
           </div>
           <div className="flex items-center justify-between">
             <button

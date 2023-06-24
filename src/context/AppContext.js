@@ -51,7 +51,7 @@ export const AppContextProvider = ({ children }) => {
     const payload = {
       ...mainController,
       boxNumber: userBoxes?.length + 1,
-      userId: userData.userId,
+      userId: userData?.userId,
     };
     setCreateBoxStatus(CreateBoxStatus.CREATING_BOX);
     try {
@@ -89,7 +89,7 @@ export const AppContextProvider = ({ children }) => {
       alert(msg);
       setCreateBoxStatus(CreateBoxStatus.CREATE_BOX_FAIL);
     }
-  }, [getUserBoxes, mainController, userBoxes?.length, userData.userId]);
+  }, [getUserBoxes, mainController, userBoxes?.length, userData?.userId]);
 
   const memoizedValue = useMemo(
     () => ({

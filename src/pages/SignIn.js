@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 import { AppContext } from "../context/AppContext";
 import { setData } from "../api/CommonFunctions";
@@ -15,6 +16,7 @@ const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,6 +43,10 @@ const SignInScreen = () => {
     } else {
       setError("Please fill all fields.");
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
   };
 
   return (
@@ -85,15 +91,23 @@ const SignInScreen = () => {
             >
               Password
             </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <span
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </span>
+            </div>
           </div>
           <div className="flex items-center justify-between">
             <button
