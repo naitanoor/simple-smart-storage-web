@@ -6,15 +6,18 @@ import Protected from "./utils/ProtectedRoutes";
 // public routes
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 // protected routes
 import Dashboard from "./pages/Dashboard";
 
+// not found page
 import NotFound from "./pages/NotFound";
+
+// other imports
 import DefaultNavbar from "./components/Navbar/DefaultNavbar";
 import { AppContext } from "./context/AppContext";
-import ForgotPassword from "./pages/ForgetPassword";
-import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const { isSignedIn } = useContext(AppContext);

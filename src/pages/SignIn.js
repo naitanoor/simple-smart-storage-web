@@ -29,7 +29,6 @@ const SignInScreen = () => {
       // call to API
       UserController.signIn(payload)
         .then(async (res) => {
-          console.log("🚀 ~ file: SignIn.js:30 ~ .then ~ res:", res);
           setUserData(res.user);
           await setData("userData", res.user);
           setLoading(false);
