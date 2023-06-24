@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import ProtectedRoutes from "./utils/ProtectedRoutes";
-import UnauthenticatedRoutes from "./utils/UnauthenticatedRoutes";
+import Protected from "./utils/ProtectedRoutes";
 
 // public routes
 import Home from "./pages/Home";
@@ -15,62 +14,23 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import DefaultNavbar from "./components/Navbar/DefaultNavbar";
 import { AppContext } from "./context/AppContext";
-import { getData } from "./api/CommonFunctions";
 
 function App() {
-  const { isSignedIn, setIsSignedIn, setUserData } = useContext(AppContext);
-
-  const [signInStatusChecked, setSignInStatusChecked] = useState(false);
-
-  // References
-
-  useEffect(() => {
-    (async () => {
-      const userData = await getData("userData");
-      console.log("🚀 ~ file: App.js:30 ~ userData:", userData);
-      if (userData) {
-        setUserData(userData);
-        setIsSignedIn(true);
-      }
-      setSignInStatusChecked(true);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { isSignedIn } = useContext(AppContext);
 
   return (
     <Router>
       {isSignedIn && <DefaultNavbar />}
       <Routes>
-        <Route
-          path="/"
-          element={
-            <UnauthenticatedRoutes>
-              <Home />
-            </UnauthenticatedRoutes>
-          }
-        />
-        <Route
-          path="/signin"
-          element={
-            <UnauthenticatedRoutes>
-              <SignIn />
-            </UnauthenticatedRoutes>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <UnauthenticatedRoutes>
-              <SignUp />
-            </UnauthenticatedRoutes>
-          }
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoutes>
+            <Protected isSignedIn={isSignedIn}>
               <Dashboard />
-            </ProtectedRoutes>
+            </Protected>
           }
         />
         <Route path="*" element={<NotFound />} />

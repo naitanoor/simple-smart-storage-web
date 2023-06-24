@@ -6,12 +6,14 @@ import { getValue } from "../api/CommonFunctions";
 import { AUTH_TOKEN } from "../constants";
 
 function UnauthenticatedRoutes({ children }) {
-  console.log("getValue(AUTH_TOKEN)", getValue(AUTH_TOKEN));
-  return getValue(AUTH_TOKEN) ? children : <Navigate to={"/dashboard"} />;
+  return !getValue(AUTH_TOKEN) ? children : <Navigate to={"/dashboard"} />;
 }
 
-UnauthenticatedRoutes.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+// function Protected({ isSignedIn, children }) {
+//   if (!isSignedIn) {
+//     return <Navigate to="/" replace />;
+//   }
+//   return children;
+// }
 
 export default UnauthenticatedRoutes;

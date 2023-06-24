@@ -1,11 +1,14 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { AppContext } from "../context/AppContext";
 import { setData } from "../api/CommonFunctions";
 import { UserController } from "../api/controllers/UserController";
 
 const SignInScreen = () => {
+  const navigate = useNavigate();
+
   const { setIsSignedIn, setUserData } = useContext(AppContext);
 
   const [loading, setLoading] = useState(false);
@@ -24,13 +27,14 @@ const SignInScreen = () => {
       // call to API
       UserController.signIn(payload)
         .then(async (res) => {
+          console.log("🚀 ~ file: SignIn.js:30 ~ .then ~ res:", res);
           setUserData(res.user);
           await setData("userData", res.user);
           setLoading(false);
           setIsSignedIn(true);
+          navigate("/dashboard");
         })
         .catch((e) => {
-          console.log("🚀 ~ file: SignIn.js:32 ~ handleSubmit ~ e:", e);
           setError(e);
           setLoading(false);
         });

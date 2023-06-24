@@ -39,11 +39,14 @@ export const getData = async (key) => {
 
 export const getValue = async (key) => {
   try {
-    const value = localStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    }
-    return null;
+    return new Promise((resolve, reject) => {
+      const value = localStorage.getItem(key);
+      if (value !== null) {
+        resolve(value);
+      } else {
+        resolve(null);
+      }
+    });
   } catch (e) {
     return false;
   }
