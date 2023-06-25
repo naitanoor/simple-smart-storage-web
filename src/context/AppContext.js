@@ -1,6 +1,13 @@
-import React, { createContext, useState, useMemo, useCallback } from "react";
+import React, {
+  createContext,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from "react";
 
 import { BoxController } from "../api/controllers/BoxController";
+import { getData } from "../api/CommonFunctions";
 
 export const AppContext = createContext({});
 
@@ -18,6 +25,20 @@ export const AppContextProvider = ({ children }) => {
   const [createBoxStatus, setCreateBoxStatus] = useState(
     CreateBoxStatus.INITIAL
   );
+
+  useEffect(() => {
+    (async () => {
+      const data = await getData("userData");
+      if (data) {
+        setIsSignedIn(true);
+        setUserData(data);
+      } else {
+        setIsSignedIn(false);
+        setUserData(null);
+      }
+    })();
+  }, []);
+
   // eslint-disable-next-line no-unused-vars
   const [createBoxError, setCreateBoxError] = useState("");
 

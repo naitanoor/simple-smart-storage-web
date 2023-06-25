@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Protected from "./utils/ProtectedRoutes";
+import Public from "./utils/UnauthenticatedRoutes";
+import LayoutMaster from "./components/LayoutMaster";
 
 // public routes
 import SignIn from "./pages/SignIn";
@@ -15,32 +17,62 @@ import Dashboard from "./pages/Dashboard";
 // not found page
 import NotFound from "./pages/NotFound";
 
-// other imports
-import DefaultNavbar from "./components/Navbar/DefaultNavbar";
-import { AppContext } from "./context/AppContext";
-
 function App() {
-  const { isSignedIn } = useContext(AppContext);
-
   return (
     <Router>
-      {isSignedIn && <DefaultNavbar />}
-      <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route
-          path="/dashboard"
-          element={
-            <Protected isSignedIn={isSignedIn}>
-              <Dashboard />
-            </Protected>
-          }
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <LayoutMaster>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Public>
+                <SignIn />
+              </Public>
+            }
+          />
+          <Route
+            path="/signin"
+            element={
+              <Public>
+                <SignIn />
+              </Public>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <Public>
+                <SignUp />
+              </Public>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <Public>
+                <ForgotPassword />
+              </Public>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <Public>
+                <ResetPassword />
+              </Public>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <Protected>
+                <Dashboard />
+              </Protected>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </LayoutMaster>
     </Router>
   );
 }

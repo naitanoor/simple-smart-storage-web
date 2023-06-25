@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 
-function Protected({ isSignedIn, children }) {
+import { AppContext } from "../context/AppContext";
+
+function Protected({ children }) {
+  const { isSignedIn } = useContext(AppContext);
+
   if (!isSignedIn) {
     return <Navigate to="/signin" replace />;
   }
