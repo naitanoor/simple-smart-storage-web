@@ -25,6 +25,7 @@ import BoxDetails from "./pages/BoxDetails";
 import CreatePackage from "./pages/CreatePackage";
 import AddPackageDetals from "./pages/AddPackageDetails";
 import AddPackageItem from "./pages/AddPackageItem";
+import ScanQr from "./pages/ScanQr";
 
 function App() {
   return (
@@ -148,6 +149,14 @@ function App() {
             element={
               <Protected>
                 <AddPackageItem />
+              </Protected>
+            }
+          />
+          <Route
+            path="/scan-qr"
+            element={
+              <Protected>
+                <ScanQr />
               </Protected>
             }
           />

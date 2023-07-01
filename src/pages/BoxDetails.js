@@ -18,7 +18,11 @@ const ItemCard = ({ imageSource, title, keywords }) => {
   return (
     <div className="flex border-2 mb-4 p-4 rounded-lg flex-col items-center">
       {imageSource ? (
-        <img className="w-full h-auto mb-4" src={imageSource} alt="Item-Pic" />
+        <img
+          className="w-full h-auto mb-4 rounded-lg"
+          src={imageSource}
+          alt="Item-Pic"
+        />
       ) : (
         <div className="w-full h-auto flex items-center justify-center mb-4">
           <span className="text-xl text-red-500">No image found</span>
@@ -46,6 +50,7 @@ const ItemCard = ({ imageSource, title, keywords }) => {
 const BoxDetails = () => {
   const location = useLocation();
   const boxData = location?.state?.boxData;
+  console.log("🚀 ~ file: BoxDetails.js:49 ~ BoxDetails ~ boxData:", boxData);
 
   const [form] = Form.useForm();
 
@@ -105,10 +110,10 @@ const BoxDetails = () => {
             return (
               <div key={item?.itemId}>
                 <ItemCard
-                  // imageSource={item?.itemImage}
-                  imageSource={
-                    "https://img.freepik.com/free-vector/giant-check-list_23-2148087771.jpg?w=1380&t=st=1688210405~exp=1688211005~hmac=cd885fc015466489327d78f0ee1f88c1e163a4ab3965187a88ec02c38b0df150"
-                  }
+                  imageSource={item?.itemImage}
+                  // imageSource={
+                  //   "https://img.freepik.com/free-vector/giant-check-list_23-2148087771.jpg?w=1380&t=st=1688210405~exp=1688211005~hmac=cd885fc015466489327d78f0ee1f88c1e163a4ab3965187a88ec02c38b0df150"
+                  // }
                   title={item?.name}
                   keywords={item?.keywords}
                 />

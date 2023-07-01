@@ -1,15 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Select,
-  Typography,
-  InputNumber,
-  notification,
-} from "antd";
+import { Button, Form, Input, Select, Typography, notification } from "antd";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import QRCode from "react-qr-code";
 
 import { AppContext } from "../context/AppContext";
 import { StorageController } from "../api/controllers/StorageController";
@@ -22,13 +15,14 @@ const layout = {
 };
 
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  wrapperCol: { offset: 0, span: 24 },
 };
 
 const AddPackageDetals = () => {
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
-  const location = useLocation();
+  // const location = useLocation();
+  const navigate = useNavigate();
 
   const {
     userData,
@@ -38,6 +32,10 @@ const AddPackageDetals = () => {
     createBoxStatus,
   } = useContext(AppContext);
 
+  const [back] = useState("#FFFFFF");
+  const [fore] = useState("#000000");
+  const [size] = useState(256);
+
   const [loading, setLoading] = useState(false);
   const [warehouses, setWarehouses] = useState([]);
   const [storerooms, setStorerooms] = useState([]);
@@ -45,18 +43,6 @@ const AddPackageDetals = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState(
     currentValues?.warehouse
   );
-  const [selectedStoreroom, setSelectedStoreroom] = useState(
-    currentValues?.storeRoom
-  );
-  const [qrCode, setQrCode] = useState("");
-
-  useEffect(() => {
-    setQrCode(location?.state?.qrCode || currentValues.qrCode);
-    parentCallback({
-      qrCode: location?.state?.qrCode || currentValues.qrCode,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location?.state?.qrCode]);
 
   useEffect(() => {
     fetchWarehouses();
@@ -116,16 +102,21 @@ const AddPackageDetals = () => {
       handleSelectWarehouse(value?.warehouse);
     }
     if (value?.hasOwnProperty("storeRoom")) {
-      setSelectedStoreroom(value?.storeRoom);
+      // setSelectedStoreroom(value?.storeRoom);
       handleSelectStoreroom(value?.storeRoom);
     }
   };
 
   const onFinish = async (values) => {
+    console.log("🚀 ~ file: AddPackageDetails.js:111 ~ onFinish ~ values:", {
+      values,
+      currentValues,
+      userData,
+    });
     if (userData) {
       const payload = {
         ...values,
-        qrCode,
+        qrCode: currentValues.qrCode,
         user_id: userData?.userId,
       };
       // setLoading(true);
@@ -135,7 +126,7 @@ const AddPackageDetals = () => {
           onCreatePackage();
         }, 500);
       } else {
-        alert("Warning: " + "No items are added in the box!");
+        alert("Warning: No items are added in the box!");
       }
     }
   };
@@ -143,6 +134,10 @@ const AddPackageDetals = () => {
   const onReset = () => {
     form.resetFields();
     setLoading(false);
+  };
+
+  const handleScanQrCode = () => {
+    navigate("/scan-qr", { state: { isCreatingBox: true } });
   };
 
   return (
@@ -156,7 +151,9 @@ const AddPackageDetals = () => {
         name="control-hooks"
         onFinish={onFinish}
         style={{ maxWidth: 1000 }}
-        initialValues={{}}
+        initialValues={{
+          qrCode: currentValues.qrCode,
+        }}
         onValuesChange={onFormLayoutChange}
       >
         {contextHolder}
@@ -203,24 +200,51 @@ const AddPackageDetals = () => {
           rules={[{ required: true, message: "Rack is required" }]}
         >
           <Select placeholder="Rack">
-            {storerooms.map((storeroom) => {
+            {racks.map((rack) => {
               return (
-                <Select.Option key={storeroom?.id} value={storeroom.id}>
-                  {storeroom?.name}
+                <Select.Option key={rack?.rack_id} value={rack.rack_id}>
+                  {rack?.rack_name}
                 </Select.Option>
               );
             })}
           </Select>
         </Form.Item>
+
+        {currentValues?.qrCode && (
+          <Form.Item
+            name="qrCode"
+            label="QrCode"
+            rules={[{ required: true, message: "QrCode is required" }]}
+          >
+            <QRCode
+              title="SSS"
+              value={currentValues?.qrCode}
+              bgColor={back}
+              fgColor={fore}
+              size={size === "" ? 0 : size}
+            />
+          </Form.Item>
+        )}
         <Form.Item {...tailLayout}>
           <Button
+            onClick={handleScanQrCode}
             style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
             type="primary"
             htmlType="submit"
             loading={loading}
           >
-            Attach QrCode
+            {currentValues?.qrCode ? "Update QrCode" : "Attach QrCode"}
           </Button>
+          <Link to={"/add-package-item"}>
+            <Button
+              type="primary"
+              style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+              htmlType="button"
+              onClick={onReset}
+            >
+              Add Items
+            </Button>
+          </Link>
           <Button
             style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
             type="primary"
@@ -229,15 +253,7 @@ const AddPackageDetals = () => {
           >
             Save
           </Button>
-          <Button
-            type="primary"
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
-            htmlType="button"
-            onClick={onReset}
-          >
-            Reset
-          </Button>
-          <Link to={"/dashboard"}>
+          {/* <Link to={"/dashboard"}>
             <Button
               type="primary"
               style={{ backgroundColor: "#f44336", marginLeft: 10 }}
@@ -245,7 +261,7 @@ const AddPackageDetals = () => {
             >
               Cancel
             </Button>
-          </Link>
+          </Link> */}
         </Form.Item>
       </Form>
     </>

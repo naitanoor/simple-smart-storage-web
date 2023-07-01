@@ -1,17 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Select,
-  Typography,
-  InputNumber,
-  notification,
-} from "antd";
+import React, { useState, useContext } from "react";
+import { Upload, Space, Button, Form, Input, Typography } from "antd";
 import { Link } from "react-router-dom";
+import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 import { AppContext } from "../context/AppContext";
-import { StorageController } from "../api/controllers/StorageController";
 
 const { Title } = Typography;
 
@@ -26,98 +19,107 @@ const tailLayout = {
 
 const AddPackageItem = () => {
   const [form] = Form.useForm();
-  const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
 
-  const { userData, currentValues, parentCallback } = useContext(AppContext);
-  console.log(
-    "🚀 ~ file: AddPackageItem.js:32 ~ AddPackageItem ~ currentValues:",
-    { currentValues }
-  );
+  const { currentValues, parentCallback } = useContext(AppContext);
+
+  const [keyword, setKeyword] = useState("");
+  const [keywords, setKeywords] = useState([]);
+  const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [warehouses, setWarehouses] = useState([]);
-  const [storerooms, setStorerooms] = useState([]);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [itemNumber] = useState(currentValues?.items?.length + 1);
 
-  useEffect(() => {
-    fetchWarehouses();
-    return () => {
-      // Clean up any resources or subscriptions here
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchWarehouses = () => {
-    StorageController.getUserWarehouses(userData?.userId)
-      .then((res) => {
-        if (res?.success) {
-          setWarehouses(res?.data);
-        }
-      })
-      .catch((e) => {
-        alert("Error", e?.message ? e?.message : "Something went wrong");
-      });
-  };
-
-  const fetchStorerooms = (warehouseId) => {
-    StorageController.getUserStorerooms(warehouseId, userData?.userId)
-      .then((res) => {
-        if (res?.success) {
-          setStorerooms(res?.data);
-        }
-      })
-      .catch((e) => {
-        alert("Error", e?.message ? e?.message : "Something went wrong");
-      });
-  };
-
-  const handleSelectWarehouse = (warehouseId) => {
-    fetchStorerooms(warehouseId);
-  };
-
-  const onFormLayoutChange = (value) => {
-    if (value?.hasOwnProperty("warehouse_id")) {
-      handleSelectWarehouse(value?.warehouse_id);
-    }
-  };
   const onFinish = async (values) => {
-    if (userData) {
-      const payload = {
-        user_id: userData?.userId,
-        ...values,
-      };
-      setLoading(true);
-      try {
-        const res = await StorageController.addRack(payload);
-        if (res?.success) {
-          setLoading(false);
-          api.success({
-            message: "Success",
-            description: res?.message,
-            placement: "topRight",
-          });
-          setTimeout(() => {
-            onReset();
-          }, 1000);
-        }
-      } catch (e) {
-        setLoading(false);
-        api.error({
-          message: "Fail",
-          description: e?.message || "Something went wrong!",
-          placement: "topRight",
-        });
-      }
-    } else {
-      api.error({
-        message: "Fail",
-        description: "User info not found, try login again",
-        placement: "topRight",
-      });
-    }
+    parentCallback({
+      items: [
+        ...currentValues?.items,
+        {
+          name: values.name,
+          itemNumber,
+          itemImage: imageUrl,
+          keywords,
+        },
+      ],
+    });
+
+    setTimeout(() => {
+      navigate("/create-box");
+    }, 500);
   };
 
   const onReset = () => {
     form.resetFields();
     setLoading(false);
+  };
+
+  const handleAddTag = () => {
+    if (keyword) {
+      setKeywords([...keywords, keyword]);
+      setKeyword("");
+      // form.setFieldValue("keyword", "");
+      // onReset();
+    }
+  };
+
+  const handleChange = ({ fileList: newFileList }) => {
+    setLoading(true);
+    setFileList(newFileList);
+  };
+
+  const handleImageUpload = async (data) => {
+    if (data) {
+      const formData = new FormData();
+      formData.append("image", data?.file);
+
+      try {
+        const response = await fetch(
+          "https://api.imgbb.com/1/upload?key=755cd40349b781d801c71cbd0fc6e737",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        setLoading(false);
+        if (response.ok) {
+          const data = await response.json();
+          const obj = {
+            uid: data.data.id,
+            name: data.data.name,
+            status: "done",
+            url: data.data.url,
+          };
+          setFileList([obj]);
+          setImageUrl(data.data.url);
+        } else {
+          console.error("Image upload failed");
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
   };
 
   return (
@@ -130,79 +132,81 @@ const AddPackageItem = () => {
         form={form}
         name="control-hooks"
         onFinish={onFinish}
-        style={{ maxWidth: 1000 }}
+        style={{ maxWidth: 600 }}
         initialValues={{}}
-        onValuesChange={onFormLayoutChange}
       >
-        {contextHolder}
         <Form.Item
-          name="warehouse_id"
-          label="Select Warehouse"
-          rules={[{ required: true, message: "Warehouse is required" }]}
+          label="Item image"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
         >
-          <Select placeholder="Warehouse">
-            {warehouses.map((warehouse) => {
-              return (
-                <Select.Option key={warehouse?.id} value={warehouse.id}>
-                  {warehouse?.name}
-                </Select.Option>
-              );
-            })}
-          </Select>
+          <Upload
+            listType="picture-card"
+            maxCount={1}
+            customRequest={handleImageUpload}
+            onChange={handleChange}
+            fileList={fileList}
+            onPreview={onPreview}
+          >
+            <div>
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Upload</div>
+            </div>
+          </Upload>
         </Form.Item>
         <Form.Item
-          name="storeroom_id"
-          label="Select Storeroom"
-          rules={[{ required: true, message: "Storeroom is required" }]}
+          name="name"
+          label="Item name"
+          rules={[{ required: true, message: "Item name is required" }]}
         >
-          <Select placeholder="Storeroom">
-            {storerooms.map((storeroom) => {
-              return (
-                <Select.Option key={storeroom?.id} value={storeroom.id}>
-                  {storeroom?.name}
-                </Select.Option>
-              );
-            })}
-          </Select>
+          <Input placeholder="Item name" />
         </Form.Item>
         <Form.Item
-          name="rack_name"
-          label="Rack Name"
-          rules={[{ required: true, message: "rack name is required" }]}
+          name="keyword"
+          label="Keyword"
+          rules={[{ required: true, message: "Keyword is required" }]}
         >
-          <Input placeholder="Enter rack name" />
-        </Form.Item>
-        <Form.Item
-          name="rack_number"
-          label="Rack Number"
-          rules={[{ required: true, message: "rack number is required" }]}
-        >
-          <InputNumber
-            placeholder="Enter rack number"
+          <Space.Compact
             style={{
               width: "100%",
             }}
-          />
+          >
+            <Input
+              onChange={(e) => setKeyword(e.target.value)}
+              defaultValue=""
+              placeholder="Keyword"
+            />
+            <Button
+              type="primary"
+              style={{ backgroundColor: "#1777ff", marginLeft: 0 }}
+              htmlType="button"
+              onClick={handleAddTag}
+            >
+              ADD
+            </Button>
+          </Space.Compact>
+
+          {/* <Button type="primary">Submit</Button> */}
         </Form.Item>
-        <Form.Item
-          name="capacity"
-          label="Rack Capacity"
-          rules={[{ required: true, message: "rack capacity is required" }]}
+
+        <div
+          className="flex mb-6"
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <InputNumber
-            style={{
-              width: "100%",
-            }}
-            placeholder="Enter rack capacity"
-          />
-        </Form.Item>
-        <Form.Item
-          name="rack_type"
-          label="Rack type"
-          rules={[{ required: true, message: "rack type is required" }]}
-        >
-          <Input placeholder="Enter rack type" />
-        </Form.Item>
+          <div className="flex overflow-x-auto">
+            {keywords?.map((keyword, index) => (
+              <div
+                key={index}
+                className="px-2 py-1 bg-gray-500 text-white rounded mr-2"
+              >
+                {keyword}
+              </div>
+            ))}
+          </div>
+        </div>
 
         <Form.Item {...tailLayout}>
           <Button
@@ -211,7 +215,7 @@ const AddPackageItem = () => {
             htmlType="submit"
             loading={loading}
           >
-            Submit
+            Save
           </Button>
           <Button
             type="primary"
