@@ -16,7 +16,7 @@ function CreatePackage() {
   };
 
   return (
-    <div class="grid grid-cols-1 gap-6 mb-4">
+    <div class="grid grid-cols-1 gap-6 mb-14 mt-20">
       <div class="flex items-center justify-center">
         <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
           <h2

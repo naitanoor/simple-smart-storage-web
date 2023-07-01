@@ -9,6 +9,7 @@ import {
   notification,
 } from "antd";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { AppContext } from "../context/AppContext";
 import { StorageController } from "../api/controllers/StorageController";
@@ -27,11 +28,35 @@ const tailLayout = {
 const AddPackageDetals = () => {
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
+  const location = useLocation();
 
-  const { userData } = useContext(AppContext);
+  const {
+    userData,
+    currentValues,
+    parentCallback,
+    onCreatePackage,
+    createBoxStatus,
+  } = useContext(AppContext);
+
   const [loading, setLoading] = useState(false);
   const [warehouses, setWarehouses] = useState([]);
   const [storerooms, setStorerooms] = useState([]);
+  const [racks, setRacks] = useState([]);
+  const [selectedWarehouse, setSelectedWarehouse] = useState(
+    currentValues?.warehouse
+  );
+  const [selectedStoreroom, setSelectedStoreroom] = useState(
+    currentValues?.storeRoom
+  );
+  const [qrCode, setQrCode] = useState("");
+
+  useEffect(() => {
+    setQrCode(location?.state?.qrCode || currentValues.qrCode);
+    parentCallback({
+      qrCode: location?.state?.qrCode || currentValues.qrCode,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location?.state?.qrCode]);
 
   useEffect(() => {
     fetchWarehouses();
@@ -65,49 +90,53 @@ const AddPackageDetals = () => {
       });
   };
 
+  const fetchRacks = (storeroomId) => {
+    StorageController.getRacks(userData?.userId, selectedWarehouse, storeroomId)
+      .then((res) => {
+        if (res?.success) {
+          setRacks(res?.data);
+        }
+      })
+      .catch((e) => {
+        alert("Error", e?.message ? e?.message : "Something went wrong");
+      });
+  };
+
   const handleSelectWarehouse = (warehouseId) => {
     fetchStorerooms(warehouseId);
   };
 
+  const handleSelectStoreroom = (storeroomId) => {
+    fetchRacks(storeroomId);
+  };
+
   const onFormLayoutChange = (value) => {
-    if (value?.hasOwnProperty("warehouse_id")) {
-      handleSelectWarehouse(value?.warehouse_id);
+    if (value?.hasOwnProperty("warehouse")) {
+      setSelectedWarehouse(value?.warehouse);
+      handleSelectWarehouse(value?.warehouse);
+    }
+    if (value?.hasOwnProperty("storeRoom")) {
+      setSelectedStoreroom(value?.storeRoom);
+      handleSelectStoreroom(value?.storeRoom);
     }
   };
+
   const onFinish = async (values) => {
     if (userData) {
       const payload = {
-        user_id: userData?.userId,
         ...values,
+        qrCode,
+        user_id: userData?.userId,
       };
-      setLoading(true);
-      try {
-        const res = await StorageController.addRack(payload);
-        if (res?.success) {
-          setLoading(false);
-          api.success({
-            message: "Success",
-            description: res?.message,
-            placement: "topRight",
-          });
-          setTimeout(() => {
-            onReset();
-          }, 1000);
-        }
-      } catch (e) {
-        setLoading(false);
-        api.error({
-          message: "Fail",
-          description: e?.message || "Something went wrong!",
-          placement: "topRight",
-        });
+      // setLoading(true);
+      parentCallback(payload);
+      if (currentValues?.items?.length > 0) {
+        setTimeout(() => {
+          onCreatePackage();
+        }, 500);
+      } else {
+        alert("Warning: " + "No items are added in the box!");
       }
-    } else {
-      api.error({
-        message: "Fail",
-        description: "User info not found, try login again",
-        placement: "topRight",
-      });
     }
   };
 
@@ -119,7 +148,7 @@ const AddPackageDetals = () => {
   return (
     <>
       <Title level={3} style={{ textAlign: "center" }}>
-        Add Rack
+        Storage Details
       </Title>
       <Form
         {...layout}
@@ -132,7 +161,14 @@ const AddPackageDetals = () => {
       >
         {contextHolder}
         <Form.Item
-          name="warehouse_id"
+          name="boxName"
+          label="Box Name"
+          rules={[{ required: true, message: "Box name is required" }]}
+        >
+          <Input placeholder="Enter box name" />
+        </Form.Item>
+        <Form.Item
+          name="warehouse"
           label="Select Warehouse"
           rules={[{ required: true, message: "Warehouse is required" }]}
         >
@@ -147,7 +183,7 @@ const AddPackageDetals = () => {
           </Select>
         </Form.Item>
         <Form.Item
-          name="storeroom_id"
+          name="storeRoom"
           label="Select Storeroom"
           rules={[{ required: true, message: "Storeroom is required" }]}
         >
@@ -162,44 +198,20 @@ const AddPackageDetals = () => {
           </Select>
         </Form.Item>
         <Form.Item
-          name="rack_name"
-          label="Rack Name"
-          rules={[{ required: true, message: "rack name is required" }]}
+          name="rackNumber"
+          label="Select rack"
+          rules={[{ required: true, message: "Rack is required" }]}
         >
-          <Input placeholder="Enter rack name" />
+          <Select placeholder="Rack">
+            {storerooms.map((storeroom) => {
+              return (
+                <Select.Option key={storeroom?.id} value={storeroom.id}>
+                  {storeroom?.name}
+                </Select.Option>
+              );
+            })}
+          </Select>
         </Form.Item>
-        <Form.Item
-          name="rack_number"
-          label="Rack Number"
-          rules={[{ required: true, message: "rack number is required" }]}
-        >
-          <InputNumber
-            placeholder="Enter rack number"
-            style={{
-              width: "100%",
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          name="capacity"
-          label="Rack Capacity"
-          rules={[{ required: true, message: "rack capacity is required" }]}
-        >
-          <InputNumber
-            style={{
-              width: "100%",
-            }}
-            placeholder="Enter rack capacity"
-          />
-        </Form.Item>
-        <Form.Item
-          name="rack_type"
-          label="Rack type"
-          rules={[{ required: true, message: "rack type is required" }]}
-        >
-          <Input placeholder="Enter rack type" />
-        </Form.Item>
-
         <Form.Item {...tailLayout}>
           <Button
             style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
@@ -207,7 +219,15 @@ const AddPackageDetals = () => {
             htmlType="submit"
             loading={loading}
           >
-            Submit
+            Attach QrCode
+          </Button>
+          <Button
+            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
+            Save
           </Button>
           <Button
             type="primary"

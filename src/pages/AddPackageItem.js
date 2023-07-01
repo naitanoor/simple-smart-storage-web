@@ -28,7 +28,11 @@ const AddPackageItem = () => {
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
 
-  const { userData } = useContext(AppContext);
+  const { userData, currentValues, parentCallback } = useContext(AppContext);
+  console.log(
+    "🚀 ~ file: AddPackageItem.js:32 ~ AddPackageItem ~ currentValues:",
+    { currentValues }
+  );
   const [loading, setLoading] = useState(false);
   const [warehouses, setWarehouses] = useState([]);
   const [storerooms, setStorerooms] = useState([]);

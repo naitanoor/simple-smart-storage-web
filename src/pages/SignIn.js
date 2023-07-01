@@ -36,7 +36,6 @@ const SignInScreen = () => {
           navigate("/dashboard");
         })
         .catch((e) => {
-          console.log("🚀 ~ file: SignIn.js:39 ~ handleSubmit ~ e:", e);
           setError(e?.message || e);
           setLoading(false);
         });
