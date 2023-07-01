@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   HomeIcon,
   CalendarIcon,
@@ -6,8 +6,16 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
+import { AppContext } from "../context/AppContext";
+
 function Dashboard() {
   const navigate = useNavigate();
+  const { userData, userBoxes, getUserBoxes } = useContext(AppContext);
+
+  useEffect(() => {
+    getUserBoxes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData, navigate]);
 
   const onAddWareHouse = () => {
     navigate("/add-warehouse");
@@ -33,6 +41,12 @@ function Dashboard() {
       <div class="flex items-center justify-center">
         <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
           <div class="flex flex-col items-center pb-10">
+            <h2
+              className="text-xl font-bold mb-2 mt-4"
+              style={{ textAlign: "center" }}
+            >
+              Boxes Created: {userBoxes?.length}
+            </h2>
             <HomeIcon className="w-24 h-24 mb-6" />
             <button
               onClick={onAddWareHouse}

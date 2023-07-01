@@ -8,11 +8,11 @@ function CreatePackage() {
 
   const navigate = useNavigate();
 
-  const onAddWareHouse = () => {
-    navigate("/add-warehouse");
+  const onAddPackageDetails = () => {
+    navigate("/add-package-details");
   };
-  const onAddStoreroom = () => {
-    navigate("/add-storeroom");
+  const onAddItems = () => {
+    navigate("/add-package-item");
   };
 
   return (
@@ -27,13 +27,13 @@ function CreatePackage() {
           </h2>
           <div class="w-full flex items-center p-10">
             <button
-              onClick={onAddWareHouse}
+              onClick={onAddPackageDetails}
               class="text-white ml-10 mr-10 mb-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               ADD DETAILS
             </button>
             <button
-              onClick={onAddStoreroom}
+              onClick={onAddItems}
               class="text-white mb-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               ADD ITEMS

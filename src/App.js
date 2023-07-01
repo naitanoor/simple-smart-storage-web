@@ -23,6 +23,8 @@ import AddRack from "./pages/AddRack";
 import TraceBox from "./pages/TraceBox";
 import BoxDetails from "./pages/BoxDetails";
 import CreatePackage from "./pages/CreatePackage";
+import AddPackageDetals from "./pages/AddPackageDetails";
+import AddPackageItem from "./pages/AddPackageItem";
 
 function App() {
   return (
@@ -130,6 +132,22 @@ function App() {
             element={
               <Protected>
                 <CreatePackage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/add-package-details"
+            element={
+              <Protected>
+                <AddPackageDetals />
+              </Protected>
+            }
+          />
+          <Route
+            path="/add-package-item"
+            element={
+              <Protected>
+                <AddPackageItem />
               </Protected>
             }
           />
