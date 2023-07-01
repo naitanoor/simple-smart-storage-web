@@ -118,19 +118,19 @@ const AddRack = () => {
 
   return (
     <>
+      <Title level={3} style={{ textAlign: "center" }}>
+        Add Rack
+      </Title>
       <Form
         {...layout}
         form={form}
         name="control-hooks"
         onFinish={onFinish}
-        style={{ maxWidth: 600 }}
+        style={{ maxWidth: 1000 }}
         initialValues={{}}
         onValuesChange={onFormLayoutChange}
       >
         {contextHolder}
-        <Form.Item>
-          <Title level={3}>Add Rack</Title>
-        </Form.Item>
         <Form.Item
           name="warehouse_id"
           label="Select Warehouse"

@@ -96,12 +96,15 @@ const AddStoreroom = () => {
 
   return (
     <>
+      <Title level={3} style={{ textAlign: "center" }}>
+        Add Storeroom
+      </Title>
       <Form
         {...layout}
         form={form}
         name="control-hooks"
         onFinish={onFinish}
-        style={{ maxWidth: 600 }}
+        style={{ maxWidth: 1000 }}
         initialValues={{
           name: "",
           location: "",
@@ -111,9 +114,6 @@ const AddStoreroom = () => {
         }}
       >
         {contextHolder}
-        <Form.Item>
-          <Title level={3}>Add Storeroom</Title>
-        </Form.Item>
         <Form.Item
           name="warehouse_id"
           label="Select Warehouse"

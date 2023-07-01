@@ -22,7 +22,7 @@ function Dashboard() {
     navigate("/pack");
   };
   const onTraceBox = () => {
-    navigate("/trace");
+    navigate("/search-box");
   };
   const onFindWhatInsideBox = () => {
     navigate("/find");

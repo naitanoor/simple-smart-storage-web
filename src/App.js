@@ -20,6 +20,8 @@ import Dashboard from "./pages/Dashboard";
 import AddWarehouse from "./pages/AddWarehouse";
 import AddStoreroom from "./pages/AddStoreroom";
 import AddRack from "./pages/AddRack";
+import TraceBox from "./pages/TraceBox";
+import BoxDetails from "./pages/BoxDetails";
 
 function App() {
   return (
@@ -103,6 +105,22 @@ function App() {
             element={
               <Protected>
                 <Profile />
+              </Protected>
+            }
+          />
+          <Route
+            path="/search-box"
+            element={
+              <Protected>
+                <TraceBox />
+              </Protected>
+            }
+          />
+          <Route
+            path="/box-details"
+            element={
+              <Protected>
+                <BoxDetails />
               </Protected>
             }
           />
