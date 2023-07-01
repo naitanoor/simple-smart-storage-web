@@ -11,13 +11,14 @@ import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 
+// not found page
+import NotFound from "./pages/NotFound";
 // protected routes
+
+import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import AddWarehouse from "./pages/AddWarehouse";
 import AddStoreroom from "./pages/AddStoreroom";
-
-// not found page
-import NotFound from "./pages/NotFound";
 import AddRack from "./pages/AddRack";
 
 function App() {
@@ -94,6 +95,14 @@ function App() {
             element={
               <Protected>
                 <AddRack />
+              </Protected>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Protected>
+                <Profile />
               </Protected>
             }
           />
