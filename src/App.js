@@ -22,6 +22,7 @@ import AddStoreroom from "./pages/AddStoreroom";
 import AddRack from "./pages/AddRack";
 import TraceBox from "./pages/TraceBox";
 import BoxDetails from "./pages/BoxDetails";
+import CreatePackage from "./pages/CreatePackage";
 
 function App() {
   return (
@@ -121,6 +122,14 @@ function App() {
             element={
               <Protected>
                 <BoxDetails />
+              </Protected>
+            }
+          />
+          <Route
+            path="/create-box"
+            element={
+              <Protected>
+                <CreatePackage />
               </Protected>
             }
           />

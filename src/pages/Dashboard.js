@@ -19,7 +19,7 @@ function Dashboard() {
     navigate("/add-rack");
   };
   const onPack = () => {
-    navigate("/pack");
+    navigate("/create-box");
   };
   const onTraceBox = () => {
     navigate("/search-box");
