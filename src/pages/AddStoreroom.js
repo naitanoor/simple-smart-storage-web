@@ -1,0 +1,189 @@
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Button,
+  Form,
+  Input,
+  Select,
+  Typography,
+  InputNumber,
+  notification,
+} from "antd";
+
+import { AppContext } from "../context/AppContext";
+import { StorageController } from "../api/controllers/StorageController";
+
+const { Title } = Typography;
+
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
+
+const AddStoreroom = () => {
+  const [form] = Form.useForm();
+  const [api, contextHolder] = notification.useNotification();
+
+  const { userData } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+  const [warehouses, setWarehouses] = useState([]);
+
+  useEffect(() => {
+    fetchWarehouses();
+    return () => {
+      // Clean up any resources or subscriptions here
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchWarehouses = () => {
+    StorageController.getUserWarehouses(userData?.userId)
+      .then((res) => {
+        if (res?.success) {
+          setWarehouses(res?.data);
+        }
+      })
+      .catch((e) => {
+        alert("Error", e?.message ? e?.message : "Something went wrong");
+      });
+  };
+
+  const onFinish = async (values) => {
+    if (userData) {
+      const payload = {
+        userId: userData?.userId,
+        ...values,
+      };
+      setLoading(true);
+      try {
+        const res = await StorageController.addStoreroom(payload);
+        if (res?.success) {
+          setLoading(false);
+          api.success({
+            message: "Success",
+            description: res?.message,
+            placement: "topRight",
+          });
+          setTimeout(() => {
+            onReset();
+          }, 1000);
+        }
+      } catch (e) {
+        setLoading(false);
+        api.error({
+          message: "Fail",
+          description: e?.message || "Something went wrong!",
+          placement: "topRight",
+        });
+      }
+    } else {
+      api.error({
+        message: "Fail",
+        description: "User info not found, try login again",
+        placement: "topRight",
+      });
+    }
+  };
+
+  const onReset = () => {
+    form.resetFields();
+    setLoading(false);
+  };
+
+  return (
+    <>
+      <Form
+        {...layout}
+        form={form}
+        name="control-hooks"
+        onFinish={onFinish}
+        style={{ maxWidth: 600 }}
+        initialValues={{
+          name: "",
+          location: "",
+          capacity: "",
+          contact_person: "",
+          contact_phone: "",
+        }}
+      >
+        {contextHolder}
+        <Form.Item>
+          <Title level={3}>Add Storeroom</Title>
+        </Form.Item>
+        <Form.Item
+          name="warehouse_id"
+          label="Select Warehouse"
+          rules={[{ required: true, message: "Warehouse is required" }]}
+        >
+          <Select placeholder="Warehouse">
+            {warehouses.map((warehouse) => {
+              return (
+                <Select.Option key={warehouse?.id} value={warehouse.id}>
+                  {warehouse?.name}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        </Form.Item>
+        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+          <Input placeholder="Enter storeroom name" />
+        </Form.Item>
+        <Form.Item
+          name="location"
+          label="Location"
+          rules={[{ required: true }]}
+        >
+          <Input placeholder="Enter storeroom location" />
+        </Form.Item>
+        <Form.Item
+          name="capacity"
+          label="Capacity"
+          rules={[{ required: true }]}
+        >
+          <InputNumber
+            style={{
+              width: "100%",
+            }}
+            placeholder="Enter storeroom capacity"
+          />
+        </Form.Item>
+        <Form.Item
+          name="contact_person"
+          label="Contact Person Name"
+          rules={[
+            { required: true, message: "contact person name is required" },
+          ]}
+        >
+          <Input placeholder="Enter contact person name" />
+        </Form.Item>
+        <Form.Item
+          name="contact_phone"
+          label="Contact Person Phone"
+          rules={[
+            { required: true, message: "contact person phone is required" },
+          ]}
+        >
+          <Input placeholder="Enter contact person phone" />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button
+            style={{ backgroundColor: "#1777ff", marginRight: 10 }}
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
+            Submit
+          </Button>
+          <Button htmlType="button" onClick={onReset}>
+            Reset
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
+  );
+};
+
+export default AddStoreroom;

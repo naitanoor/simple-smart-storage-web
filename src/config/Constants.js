@@ -1,5 +1,5 @@
 const constants = {
-  baseUrl: "http://192.168.0.107:4000/",
+  baseUrl: "http://192.168.0.101:4000/",
   api: {
     signup: "users/signup",
     signin: "users/signin",

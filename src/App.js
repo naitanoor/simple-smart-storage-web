@@ -13,9 +13,12 @@ import ResetPassword from "./pages/ResetPassword";
 
 // protected routes
 import Dashboard from "./pages/Dashboard";
+import AddWarehouse from "./pages/AddWarehouse";
+import AddStoreroom from "./pages/AddStoreroom";
 
 // not found page
 import NotFound from "./pages/NotFound";
+import AddRack from "./pages/AddRack";
 
 function App() {
   return (
@@ -67,6 +70,30 @@ function App() {
             element={
               <Protected>
                 <Dashboard />
+              </Protected>
+            }
+          />
+          <Route
+            path="/add-warehouse"
+            element={
+              <Protected>
+                <AddWarehouse />
+              </Protected>
+            }
+          />
+          <Route
+            path="/add-storeroom"
+            element={
+              <Protected>
+                <AddStoreroom />
+              </Protected>
+            }
+          />
+          <Route
+            path="/add-rack"
+            element={
+              <Protected>
+                <AddRack />
               </Protected>
             }
           />

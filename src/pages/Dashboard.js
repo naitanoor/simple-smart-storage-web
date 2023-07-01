@@ -1,23 +1,91 @@
 import React from "react";
+import {
+  HomeIcon,
+  CalendarIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+  const navigate = useNavigate();
+
+  const onAddWareHouse = () => {
+    navigate("/add-warehouse");
+  };
+  const onAddStoreroom = () => {
+    navigate("/add-storeroom");
+  };
+  const onAddRack = () => {
+    navigate("/add-rack");
+  };
+  const onPack = () => {
+    navigate("/pack");
+  };
+  const onTraceBox = () => {
+    navigate("/trace");
+  };
+  const onFindWhatInsideBox = () => {
+    navigate("/find");
+  };
+
   return (
-    <div className="flex justify-center bg-gray-100">
-      <div
-        style={{ width: "100%" }}
-        className="flex items-center h-20 w-screen"
-      >
-        <div className="ml-0 items-center w-screen">
-          <h2 className="text-2xl font-bold" style={{ color: "#2C847B" }}>
-            Welcome, Ali
-          </h2>
-          <h2 className="text-1xl">
-            Here you can create your package or find your box.
-          </h2>
+    <div class="grid grid-cols-1 gap-6 mb-4">
+      <div class="flex items-center justify-center">
+        <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <div class="flex flex-col items-center pb-10">
+            <HomeIcon className="w-24 h-24 mb-6" />
+            <button
+              onClick={onAddWareHouse}
+              class="text-white ml-10 mr-10 mb-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              ADD WAREHOUSE
+            </button>
+            <button
+              onClick={onAddStoreroom}
+              class="text-white mb-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              ADD STOREROOM
+            </button>
+            <button
+              onClick={onAddRack}
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              ADD RACK
+            </button>
+          </div>
         </div>
-        <p className="text-gray-600 ml-auto mr-0">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
+      </div>
+      <div class="flex items-center justify-center">
+        <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <div class="flex flex-col items-center pb-10">
+            <CalendarIcon className="w-24 h-24 mb-6" />
+            <button
+              onClick={onPack}
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              PACK
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-center">
+        <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <div class="flex flex-col items-center pb-10">
+            <UserGroupIcon className="w-24 h-24 mb-6" />
+            <button
+              onClick={onTraceBox}
+              class="text-white mb-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              TRACE BOX
+            </button>
+            <button
+              onClick={onFindWhatInsideBox}
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              FIND WHAT'S INSIDE THE BOX
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
