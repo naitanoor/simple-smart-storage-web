@@ -7,6 +7,7 @@ import {
   InputNumber,
   notification,
 } from "antd";
+import { Link } from "react-router-dom";
 
 import { AppContext } from "../context/AppContext";
 import { StorageController } from "../api/controllers/StorageController";
@@ -139,16 +140,30 @@ const AddWarehouse = () => {
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button
-            style={{ backgroundColor: "#1777ff", marginRight: 10 }}
+            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
             type="primary"
             htmlType="submit"
             loading={loading}
           >
             Submit
           </Button>
-          <Button htmlType="button" onClick={onReset}>
+          <Button
+            type="primary"
+            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            htmlType="button"
+            onClick={onReset}
+          >
             Reset
           </Button>
+          <Link to={"/dashboard"}>
+            <Button
+              type="primary"
+              style={{ backgroundColor: "#f44336", marginLeft: 10 }}
+              htmlType="button"
+            >
+              Cancel
+            </Button>
+          </Link>
         </Form.Item>
       </Form>
     </>
