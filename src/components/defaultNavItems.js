@@ -2,9 +2,8 @@ import React from "react";
 import {
   HomeIcon,
   UserIcon,
-  FolderIcon,
-  CalendarIcon,
-  UserGroupIcon,
+  FolderPlusIcon,
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
 export const defaultNavItems = [
@@ -18,19 +17,13 @@ export const defaultNavItems = [
     id: 2,
     label: "Create",
     link: "/create-box",
-    icon: <UserGroupIcon className="w-6 h-6" />,
-  },
-  {
-    id: 3,
-    label: "Search",
-    link: "/search-box",
-    icon: <FolderIcon className="w-6 h-6" />,
+    icon: <FolderPlusIcon className="w-6 h-6" />,
   },
   {
     id: 4,
     label: "Find",
-    link: "/find-box",
-    icon: <CalendarIcon className="w-6 h-6" />,
+    link: "/search-box",
+    icon: <MagnifyingGlassIcon className="w-6 h-6" />,
   },
   {
     id: 5,

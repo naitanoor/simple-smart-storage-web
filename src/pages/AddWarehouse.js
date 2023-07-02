@@ -98,7 +98,6 @@ const AddWarehouse = () => {
         }}
       >
         {contextHolder}
-        <Form.Item></Form.Item>
         <Form.Item name="name" label="Name" rules={[{ required: true }]}>
           <Input placeholder="Enter warehouse name" />
         </Form.Item>
@@ -141,7 +140,7 @@ const AddWarehouse = () => {
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 0 }}
             type="primary"
             htmlType="submit"
             loading={loading}
@@ -150,7 +149,7 @@ const AddWarehouse = () => {
           </Button>
           <Button
             type="primary"
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
             htmlType="button"
             onClick={onReset}
           >

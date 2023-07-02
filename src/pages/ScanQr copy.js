@@ -61,7 +61,6 @@ function ScanQr() {
           facingMode: "environment",
         }}
         onResult={(result, error) => {
-          console.log("🚀 ~ file: ScanQr.js:64 ~ ScanQr ~ result:", result);
           if (!!result) {
             setData(result?.text);
             handleQrCodeScanned(result?.text);

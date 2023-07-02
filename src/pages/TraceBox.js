@@ -19,7 +19,8 @@ const Card = ({ box, gotoBoxDetails }) => {
       <p className="text-gray-600">Rack Name: {box?.rack?.name}</p>
       <div className="mt-4">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          style={{ backgroundColor: "#2C847B" }}
+          className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => gotoBoxDetails(box)}
         >
           VIEW DETAILS

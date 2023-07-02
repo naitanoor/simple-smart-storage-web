@@ -1,17 +1,12 @@
 import React from "react";
 import { Button, Form, Input, Typography } from "antd";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 12 },
 };
 
 const ItemCard = ({ imageSource, title, keywords }) => {
@@ -49,13 +44,21 @@ const ItemCard = ({ imageSource, title, keywords }) => {
 
 const BoxDetails = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const boxData = location?.state?.boxData;
-  console.log("🚀 ~ file: BoxDetails.js:49 ~ BoxDetails ~ boxData:", boxData);
 
   const [form] = Form.useForm();
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        // alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
       <Title level={3} style={{ textAlign: "center" }}>
         BOX NO: {boxData?.boxNumber}
       </Title>
@@ -64,7 +67,9 @@ const BoxDetails = () => {
         form={form}
         name="control-hooks"
         onFinish={null}
-        style={{ maxWidth: 1000 }}
+        style={{
+          width: "100%",
+        }}
         initialValues={{
           box_name: boxData.boxName,
           warehouse_name: boxData?.warehouse?.name,
@@ -83,7 +88,7 @@ const BoxDetails = () => {
         <Form.Item name="warehouse_name" label="Warehouse">
           <Input />
         </Form.Item>
-        <Form.Item name="contact_person_name" label="Warehouse Contact Name">
+        <Form.Item name="contact_person_name" label="Warehouse Contact Person">
           <Input />
         </Form.Item>
         <Form.Item name="contact_person_phone" label="Warehouse Contact Phone">
@@ -104,16 +109,12 @@ const BoxDetails = () => {
         <Form.Item name="rack_name" label="Rack name">
           <Input />
         </Form.Item>
-
-        <Form.Item name="rack_name" label="Item(s)">
+        <Form.Item name="items" label="Item(s)">
           {boxData.items?.map((item) => {
             return (
               <div key={item?.itemId}>
                 <ItemCard
                   imageSource={item?.itemImage}
-                  // imageSource={
-                  //   "https://img.freepik.com/free-vector/giant-check-list_23-2148087771.jpg?w=1380&t=st=1688210405~exp=1688211005~hmac=cd885fc015466489327d78f0ee1f88c1e163a4ab3965187a88ec02c38b0df150"
-                  // }
                   title={item?.name}
                   keywords={item?.keywords}
                 />
@@ -121,19 +122,22 @@ const BoxDetails = () => {
             );
           })}
         </Form.Item>
-        <Form.Item {...tailLayout}>
-          <Link to={"/search-box"}>
-            <Button
-              type="primary"
-              style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
-              htmlType="button"
-            >
-              Back
-            </Button>
-          </Link>
-        </Form.Item>
       </Form>
-    </>
+      <Button
+        onClick={() => navigate("/search-box")}
+        type="primary"
+        htmlType="button"
+        style={{
+          width: "50%",
+          display: "flex",
+          alignSelf: "center",
+          backgroundColor: "#2C847B",
+          justifyContent: "center",
+        }}
+      >
+        Back
+      </Button>
+    </div>
   );
 };
 

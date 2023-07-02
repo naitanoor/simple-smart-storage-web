@@ -202,7 +202,7 @@ const AddRack = () => {
 
         <Form.Item {...tailLayout}>
           <Button
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 0 }}
             type="primary"
             htmlType="submit"
             loading={loading}
@@ -211,7 +211,7 @@ const AddRack = () => {
           </Button>
           <Button
             type="primary"
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
             htmlType="button"
             onClick={onReset}
           >

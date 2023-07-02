@@ -178,7 +178,7 @@ const AddPackageItem = () => {
             />
             <Button
               type="primary"
-              style={{ backgroundColor: "#1777ff", marginLeft: 0 }}
+              style={{ backgroundColor: "#2C847B", marginLeft: 0 }}
               htmlType="button"
               onClick={handleAddTag}
             >
@@ -210,7 +210,7 @@ const AddPackageItem = () => {
 
         <Form.Item {...tailLayout}>
           <Button
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
             type="primary"
             htmlType="submit"
             loading={loading}
@@ -219,7 +219,7 @@ const AddPackageItem = () => {
           </Button>
           <Button
             type="primary"
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
             htmlType="button"
             onClick={onReset}
           >

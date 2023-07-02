@@ -21,16 +21,10 @@ const tailLayout = {
 const AddPackageDetals = () => {
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
-  // const location = useLocation();
   const navigate = useNavigate();
 
-  const {
-    userData,
-    currentValues,
-    parentCallback,
-    onCreatePackage,
-    createBoxStatus,
-  } = useContext(AppContext);
+  const { userData, currentValues, parentCallback, onCreatePackage } =
+    useContext(AppContext);
 
   const [back] = useState("#FFFFFF");
   const [fore] = useState("#000000");
@@ -108,11 +102,6 @@ const AddPackageDetals = () => {
   };
 
   const onFinish = async (values) => {
-    console.log("🚀 ~ file: AddPackageDetails.js:111 ~ onFinish ~ values:", {
-      values,
-      currentValues,
-      userData,
-    });
     if (userData) {
       const payload = {
         ...values,
@@ -123,10 +112,11 @@ const AddPackageDetals = () => {
       parentCallback(payload);
       if (currentValues?.items?.length > 0) {
         setTimeout(() => {
-          onCreatePackage();
+          // onCreatePackage();
+          navigate("/add-package-details");
         }, 500);
       } else {
-        alert("Warning: No items are added in the box!");
+        alert("No items are added in the box!");
       }
     }
   };
@@ -152,7 +142,7 @@ const AddPackageDetals = () => {
         onFinish={onFinish}
         style={{ maxWidth: 1000 }}
         initialValues={{
-          qrCode: currentValues.qrCode,
+          ...currentValues,
         }}
         onValuesChange={onFormLayoutChange}
       >
@@ -228,7 +218,7 @@ const AddPackageDetals = () => {
         <Form.Item {...tailLayout}>
           <Button
             onClick={handleScanQrCode}
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
             type="primary"
             htmlType="submit"
             loading={loading}
@@ -238,7 +228,7 @@ const AddPackageDetals = () => {
           <Link to={"/add-package-item"}>
             <Button
               type="primary"
-              style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+              style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
               htmlType="button"
               onClick={onReset}
             >
@@ -246,7 +236,7 @@ const AddPackageDetals = () => {
             </Button>
           </Link>
           <Button
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
             type="primary"
             htmlType="submit"
             loading={loading}

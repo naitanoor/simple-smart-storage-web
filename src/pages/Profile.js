@@ -51,21 +51,21 @@ const Profile = () => {
 
   return (
     <>
+      <Title level={3} style={{ textAlign: "center" }}>
+        Profile
+      </Title>
       <Form
         {...layout}
         form={form}
         name="control-hooks"
         onFinish={onFinish}
-        style={{ maxWidth: 600 }}
+        style={{ maxWidth: 1000 }}
         initialValues={{
           name: userData?.name,
           email: userData?.email,
         }}
       >
         {contextHolder}
-        <Form.Item>
-          <Title level={3}>Profile</Title>
-        </Form.Item>
         <Form.Item
           name="name"
           label="Name"
@@ -80,10 +80,9 @@ const Profile = () => {
         >
           <Input disabled placeholder="email" />
         </Form.Item>
-
         <Form.Item {...tailLayout}>
           <Button
-            style={{ backgroundColor: "#1777ff", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
             type="primary"
             htmlType="submit"
             loading={loading}
