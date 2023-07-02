@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { notification } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import { AppContext } from "../context/AppContext";
@@ -38,6 +39,8 @@ const ItemCard = ({ imageSource, title, keywords }) => {
 
 function CreatePackage() {
   const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
+
   const { userBoxes, currentValues, onCreatePackage } = useContext(AppContext);
 
   const onAddPackageDetails = () => {
@@ -57,7 +60,34 @@ function CreatePackage() {
       currentValues?.qrCode !== undefined &&
       currentValues?.items?.length > 0
     ) {
-      onCreatePackage();
+      onCreatePackage()
+        .then((res) => {
+          if (res.success) {
+            api.success({
+              message: "Success",
+              description: res?.message,
+              placement: "topRight",
+            });
+            setTimeout(() => {
+              navigate("/dashboard");
+            }, 1500);
+          } else {
+            api.error({
+              message: "Fail",
+              description: res?.message,
+              placement: "topRight",
+            });
+          }
+        })
+        .catch((e) => {
+          if (!e.success) {
+            api.error({
+              message: "Fail",
+              description: e?.message,
+              placement: "topRight",
+            });
+          }
+        });
     } else {
       alert("Please add box details and add at least one item to the box.");
     }
@@ -65,6 +95,7 @@ function CreatePackage() {
 
   return (
     <div class="grid grid-cols-1 gap-6 mb-14 mt-20">
+      {contextHolder}
       <div
         class="flex items-center justify-center"
         style={{ flexDirection: "column" }}
@@ -103,7 +134,7 @@ function CreatePackage() {
                 {currentValues?.items?.length > 0 ? (
                   currentValues?.items?.map((item) => {
                     return (
-                      <div key={item?.itemId}>
+                      <div key={item?.itemNumber}>
                         <ItemCard
                           imageSource={item?.itemImage}
                           title={item?.name}

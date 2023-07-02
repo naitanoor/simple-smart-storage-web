@@ -63,9 +63,7 @@ export const AppContextProvider = ({ children }) => {
       .then(async (res) => {
         setUserBoxes(res?.boxes);
       })
-      .catch((e) => {
-        //alert(`FAIL`, e);
-      });
+      .catch((e) => {});
   }, [userData?.userId]);
 
   const createPackage = useCallback(() => {
@@ -75,7 +73,8 @@ export const AppContextProvider = ({ children }) => {
       userId: userData?.userId,
     };
     setCreateBoxStatus(CreateBoxStatus.CREATING_BOX);
-    try {
+
+    return new Promise((resolve, reject) => {
       BoxController.createPackage(payload)
         .then((response) => {
           if (response.success) {
@@ -89,27 +88,27 @@ export const AppContextProvider = ({ children }) => {
               items: [],
             });
             getUserBoxes();
-            alert("SUCCESS", response?.message);
+            resolve({ success: true, message: response?.message });
           } else if (!response.success) {
-            alert(
-              "FAIL",
-              response?.message || "*Something went wrong, please try again!"
-            );
             setCreateBoxError("Error");
             setCreateBoxStatus(CreateBoxStatus.CREATE_BOX_FAIL);
+            reject({
+              success: false,
+              message:
+                response?.message || "*Something went wrong, please try again!",
+            });
           }
         })
         .catch((e) => {
           const msg = e?.message || "*Something went wrong, please try again!";
           setCreateBoxError(msg);
-          alert("FAIL", msg);
           setCreateBoxStatus(CreateBoxStatus.CREATE_BOX_FAIL);
+          reject({
+            success: false,
+            message: msg,
+          });
         });
-    } catch (e) {
-      const msg = e?.message || "*Something went wrong, please try again!";
-      alert(msg);
-      setCreateBoxStatus(CreateBoxStatus.CREATE_BOX_FAIL);
-    }
+    });
   }, [getUserBoxes, mainController, userBoxes?.length, userData?.userId]);
 
   const memoizedValue = useMemo(

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Button, Form, Input, Select, Typography, notification } from "antd";
+import { Button, Form, Input, Select, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
@@ -10,21 +10,19 @@ import { StorageController } from "../api/controllers/StorageController";
 const { Title } = Typography;
 
 const layout = {
-  labelCol: { span: 8 },
+  labelCol: { span: 4 },
   wrapperCol: { span: 16 },
 };
 
 const tailLayout = {
-  wrapperCol: { offset: 0, span: 24 },
+  wrapperCol: { offset: 4, span: 16 },
 };
 
 const AddPackageDetals = () => {
   const [form] = Form.useForm();
-  const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
 
-  const { userData, currentValues, parentCallback, onCreatePackage } =
-    useContext(AppContext);
+  const { userData, currentValues, parentCallback } = useContext(AppContext);
 
   const [back] = useState("#FFFFFF");
   const [fore] = useState("#000000");
@@ -108,12 +106,10 @@ const AddPackageDetals = () => {
         qrCode: currentValues.qrCode,
         user_id: userData?.userId,
       };
-      // setLoading(true);
       parentCallback(payload);
       if (currentValues?.items?.length > 0) {
         setTimeout(() => {
-          // onCreatePackage();
-          navigate("/add-package-details");
+          navigate("/create-box");
         }, 500);
       } else {
         alert("No items are added in the box!");
@@ -132,7 +128,7 @@ const AddPackageDetals = () => {
 
   return (
     <>
-      <Title level={3} style={{ textAlign: "center" }}>
+      <Title level={3} style={{ marginLeft: 0 }}>
         Storage Details
       </Title>
       <Form
@@ -146,7 +142,6 @@ const AddPackageDetals = () => {
         }}
         onValuesChange={onFormLayoutChange}
       >
-        {contextHolder}
         <Form.Item
           name="boxName"
           label="Box Name"
@@ -218,7 +213,7 @@ const AddPackageDetals = () => {
         <Form.Item {...tailLayout}>
           <Button
             onClick={handleScanQrCode}
-            style={{ backgroundColor: "#2C847B", marginLeft: 10 }}
+            style={{ backgroundColor: "#2C847B", marginLeft: 0 }}
             type="primary"
             htmlType="submit"
             loading={loading}

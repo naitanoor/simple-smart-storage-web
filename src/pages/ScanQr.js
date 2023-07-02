@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { notification } from "antd";
-import QrReader from "react-qr-reader";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BrowserQRCodeReader } from "@zxing/library";
 
 import { AppContext } from "../context/AppContext";
 import { BoxController } from "../api/controllers/BoxController";
@@ -10,40 +10,9 @@ function ScanQr() {
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const location = useLocation();
+  const videoRef = useRef(null);
 
-  const { userData, parentCallback } = useContext(AppContext);
-
-  // const qrReaderRef = useRef(null); // Ref to the QR reader component
-  const [data, setData] = useState("");
-  const [back] = useState("#FFFFFF");
-  const [fore] = useState("#000000");
-  const [size] = useState(256);
-  const [renderQrScanner, setRenderQrScanner] = useState(false);
-
-  const cleanup = async () => {
-    // Stop the scanner when unmounting
-    if (renderQrScanner) {
-      setRenderQrScanner(false);
-    }
-
-    // Stop the camera and scanner when unmounting
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true,
-    });
-    stream.getTracks().forEach(function (track) {
-      track.stop();
-      track.enabled = false;
-    });
-    // if (qrReaderRef.current) {
-    //   // qrReaderRef.current.stopCamera();
-    // }
-  };
-
-  useEffect(() => {
-    setRenderQrScanner(true);
-    return cleanup;
-  }, []);
+  const { userData, currentValues, parentCallback } = useContext(AppContext);
 
   const handleQrCodeScanned = (data) => {
     if (location?.state?.isCreatingBox) {
@@ -53,6 +22,7 @@ function ScanQr() {
         placement: "topRight",
       });
       parentCallback({
+        ...currentValues,
         qrCode: data,
       });
       setTimeout(() => {
@@ -83,9 +53,25 @@ function ScanQr() {
     }
   };
 
-  const handleError = (err) => {
-    console.error(err);
-  };
+  useEffect(() => {
+    const codeReader = new BrowserQRCodeReader();
+    codeReader
+      .decodeOnceFromVideoDevice(undefined, videoRef.current)
+      .then((result) => {
+        console.log("Scanned result:", result);
+        handleQrCodeScanned(result.text);
+        // Handle the scanned result
+      })
+      .catch((err) => {
+        console.error(err);
+        // Handle any errors
+      });
+
+    return () => {
+      codeReader.reset();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
@@ -97,21 +83,7 @@ function ScanQr() {
       }}
     >
       {contextHolder}
-      <QrReader
-        delay={10000}
-        onError={handleError}
-        onScan={handleQrCodeScanned}
-        style={{ width: "50%" }}
-      />
-      {/* {data && (
-        <QRCode
-          title="SSS"
-          value={data}
-          bgColor={back}
-          fgColor={fore}
-          size={size === "" ? 0 : size}
-        />
-      )} */}
+      <video ref={videoRef} style={{ width: "100%", borderRadius: 6 }} />
     </div>
   );
 }
