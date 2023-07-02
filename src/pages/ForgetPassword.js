@@ -56,7 +56,10 @@ const ForgotPassword = () => {
         <h2 className="text-2xl font-bold mb-6">Forgot Password</h2>
         {loading && (
           <div className="flex items-center justify-center mb-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+            <div
+              style={{ borderColor: "#2C847B" }}
+              className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"
+            ></div>
           </div>
         )}
         {successMessage && (
@@ -89,8 +92,10 @@ const ForgotPassword = () => {
           </div>
           <div className="flex items-center justify-between mt-8">
             <button
+              style={{ backgroundColor: "#2C847B" }}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2  px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
+              disabled={loading}
             >
               Reset Password
             </button>

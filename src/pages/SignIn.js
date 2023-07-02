@@ -55,7 +55,10 @@ const SignInScreen = () => {
 
         {loading && (
           <div className="flex items-center justify-center mb-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+            <div
+              style={{ borderColor: "#2C847B" }}
+              className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"
+            ></div>
           </div>
         )}
 
@@ -110,7 +113,8 @@ const SignInScreen = () => {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              style={{ backgroundColor: "#2C847B" }}
+              className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
               disabled={loading}
             >

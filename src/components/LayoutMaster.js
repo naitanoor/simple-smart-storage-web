@@ -19,7 +19,7 @@ const LayoutMaster = ({ children }) => {
       </>
     );
   }
-  return children;
+  return <div className="p-0">{children}</div>;
 };
 
 export default LayoutMaster;
