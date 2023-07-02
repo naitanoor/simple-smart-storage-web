@@ -69,6 +69,9 @@ function ScanQr() {
 
     return () => {
       codeReader.reset();
+      codeReader.stopStreams();
+      codeReader._destroyVideoElement();
+      codeReader.stopContinuousDecode();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
