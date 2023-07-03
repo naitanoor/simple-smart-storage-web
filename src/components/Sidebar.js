@@ -102,7 +102,7 @@ const Sidebar = () => {
                       <img
                         class="w-8 h-8 rounded-full"
                         src="https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg?w=1380"
-                        alt="user photo"
+                        alt="User"
                       />
                     </button>
                   </Link>
