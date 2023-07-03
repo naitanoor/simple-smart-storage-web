@@ -12,7 +12,14 @@ const PrivacyPolicyPage = () => {
             alt="Privacy Policy"
             className="mb-6 rounded-lg shadow-md"
           />
-          <p className="text-gray-700 leading-loose">
+          <p
+            className="text-gray-700 leading-loose"
+            style={{
+              fontFamily: 'Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif',
+              fontWeight: 200,
+              textTransform: "uppercase",
+            }}
+          >
             At our smart storage solution app, we value your privacy and are
             committed to protecting your personal information. We collect only
             the necessary data required for the functionality of our app, such
