@@ -49,7 +49,10 @@ const SignInScreen = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gray-100"
+      style={{ flexDirection: "column" }}
+    >
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg px-8 py-6">
         <h2 className="text-2xl font-bold mb-6">Sign In</h2>
 
@@ -135,6 +138,20 @@ const SignInScreen = () => {
           </div>
         </form>
       </div>
+      <footer className="mt-8">
+        <p className="text-sm text-gray-500">
+          <Link to="/about-us" className="text-blue-500 hover:text-blue-800">
+            About Us
+          </Link>
+          <span className="mx-2">|</span>
+          <Link
+            to="/privacy-policy"
+            className="text-blue-500 hover:text-blue-800"
+          >
+            Privacy Policy
+          </Link>
+        </p>
+      </footer>
     </div>
   );
 };

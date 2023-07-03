@@ -10,6 +10,8 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
+import AboutUs from "./pages/AboutUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // not found page
 import NotFound from "./pages/NotFound";
@@ -61,6 +63,22 @@ function App() {
             element={
               <Public>
                 <ForgotPassword />
+              </Public>
+            }
+          />
+          <Route
+            path="/about-us"
+            element={
+              <Public>
+                <AboutUs />
+              </Public>
+            }
+          />
+          <Route
+            path="/privacy-policy"
+            element={
+              <Public>
+                <PrivacyPolicy />
               </Public>
             }
           />
