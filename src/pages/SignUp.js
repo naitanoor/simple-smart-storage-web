@@ -33,11 +33,11 @@ const SignupScreen = () => {
         UserController.signUp(payload)
           .then((res) => {
             setLoading(false);
-            setSuccessMessage("Account created successfully");
+            setSuccessMessage(res?.message || "Success");
           })
           .catch((e) => {
             setLoading(false);
-            setError(e);
+            setError(e?.message || "Something went wrong!");
           });
       }, 2000);
     } else {

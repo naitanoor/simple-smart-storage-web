@@ -49,7 +49,10 @@ const AddRack = () => {
         }
       })
       .catch((e) => {
-        alert("Error", e?.message ? e?.message : "Something went wrong");
+        alert(
+          "Warehouses Error",
+          e?.message ? e?.message : "Something went wrong"
+        );
       });
   };
 
@@ -61,7 +64,10 @@ const AddRack = () => {
         }
       })
       .catch((e) => {
-        alert("Error", e?.message ? e?.message : "Something went wrong");
+        alert(
+          "Storerooms Error",
+          e?.message ? e?.message : "Something went wrong"
+        );
       });
   };
 
@@ -74,6 +80,7 @@ const AddRack = () => {
       handleSelectWarehouse(value?.warehouse_id);
     }
   };
+
   const onFinish = async (values) => {
     if (userData) {
       const payload = {
