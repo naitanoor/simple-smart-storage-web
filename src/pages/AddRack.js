@@ -84,7 +84,7 @@ const AddRack = () => {
   const onFinish = async (values) => {
     if (userData) {
       const payload = {
-        user_id: userData?.userId,
+        userId: userData?.userId,
         ...values,
       };
       setLoading(true);
