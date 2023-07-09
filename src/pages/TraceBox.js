@@ -33,16 +33,22 @@ const Card = ({ box, gotoBoxDetails }) => {
 const TraceBox = () => {
   const navigate = useNavigate();
   const { userData } = useContext(AppContext);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [searchResponse, setSearchResponse] = useState([]);
 
   const onSearch = (e) => {
+    setError("");
     if (e.target.value !== "" && e.target.value !== undefined) {
+      setLoading(true);
       BoxController.searchBox(e.target.value, userData.userId)
         .then((res) => {
           setSearchResponse(res.boxes);
+          setLoading(false);
         })
         .catch((e) => {
-          alert(`FAIL`, e);
+          setError(e?.message || "Something went wrong!");
+          setLoading(false);
         });
     } else {
       setSearchResponse([]);
@@ -67,6 +73,19 @@ const TraceBox = () => {
             style={{ width: "100%" }}
           />
         </Space.Compact>
+        {loading && (
+          <div className="flex items-center justify-center mb-4">
+            <div
+              style={{ borderColor: "#2C847B" }}
+              className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"
+            ></div>
+          </div>
+        )}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
         {searchResponse?.map((box) => (
           <Card key={box.boxId} box={box} gotoBoxDetails={gotoBoxDetails} />
         ))}

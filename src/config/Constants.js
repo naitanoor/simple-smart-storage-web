@@ -1,6 +1,7 @@
 const constants = {
-  baseUrl: "https://smart-storage-backend-production.up.railway.app/",
   // baseUrl: "http://192.168.0.103:4000/",
+  baseUrl: "https://smart-storage-backend.vercel.app/",
+  // baseUrl: "https://smart-storage-backend-production.up.railway.app/",
   api: {
     signup: "users/signup",
     signin: "users/signin",
