@@ -42,7 +42,7 @@ function ScanQr() {
             });
           } else {
             api.info({
-              message: "Fail",
+              message: "Info",
               description: `No box found for this QR Code!`,
               placement: "topRight",
             });
