@@ -124,7 +124,7 @@ const BoxDetails = () => {
         </Form.Item>
       </Form>
       <Button
-        onClick={() => navigate("/search-box")}
+        onClick={() => navigate(-1)}
         type="primary"
         htmlType="button"
         style={{
