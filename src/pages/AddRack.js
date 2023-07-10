@@ -49,10 +49,10 @@ const AddRack = () => {
         }
       })
       .catch((e) => {
-        alert(
-          "Warehouses Error",
-          e?.message ? e?.message : "Something went wrong"
-        );
+        // alert(
+        //   "Warehouses Error",
+        //   e?.message ? e?.message : "Something went wrong"
+        // );
       });
   };
 
@@ -64,10 +64,10 @@ const AddRack = () => {
         }
       })
       .catch((e) => {
-        alert(
-          "Storerooms Error",
-          e?.message ? e?.message : "Something went wrong"
-        );
+        // alert(
+        //   "Storerooms Error",
+        //   e?.message ? e?.message : "Something went wrong"
+        // );
       });
   };
 
